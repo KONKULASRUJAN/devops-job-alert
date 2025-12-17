@@ -1,0 +1,21 @@
+name: Daily DevOps Job Alert
+
+on:
+  schedule:
+    - cron: '30 1 * * *'   # 7:00 AM IST
+  workflow_dispatch:
+
+jobs:
+  job-search:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - run: python search_email.py
+        env:
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
